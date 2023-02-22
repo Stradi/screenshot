@@ -19,6 +19,7 @@ export default function Canvas() {
       )}
     >
       <div
+        ref={editor.imageRef as React.RefObject<HTMLDivElement>}
         className={cn(
           "flex max-h-full items-center overflow-hidden",
           "bg-gradient-to-tr from-red-500 to-blue-700",
