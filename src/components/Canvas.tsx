@@ -20,14 +20,18 @@ export default function Canvas() {
     >
       <div
         className={cn(
-          "flex items-center overflow-hidden",
+          "flex max-h-full items-center overflow-hidden",
           "bg-gradient-to-tr from-red-500 to-blue-700",
-          "max-h-full transition-[aspect-ratio] duration-300 ease-in-out",
+          "transition-[aspect-ratio] duration-300 ease-in-out",
           aspectRatioToTailwindClass[editor.aspectRatio]
         )}
       >
         <div
-          className={cn("max-h-full shadow-2xl shadow-black/75", "overflow-hidden")}
+          className={cn(
+            "shadow-2xl shadow-black/75",
+            "overflow-hidden",
+            editor.adapt ? "max-h-full" : "h-auto"
+          )}
           style={{
             borderRadius: `${editor.roundness}px`,
             scale: `${editor.size / 100}`,
