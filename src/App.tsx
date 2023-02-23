@@ -1,5 +1,6 @@
 import Canvas from "./components/Canvas";
 import Container from "./components/Container";
+import Editor from "./components/Editor";
 import { cn } from "./utils/tw";
 
 export default function App() {
@@ -16,7 +17,9 @@ export default function App() {
         <div className="col-span-2">
           <Canvas />
         </div>
-        <div className="col-span-1">Editor</div>
+        <div className="col-span-1">
+          <Editor />
+        </div>
       </Container>
       <footer>Footer</footer>
     </main>
