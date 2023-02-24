@@ -77,7 +77,7 @@ export default function CoordinateInput({ min = 0, max = 1, precision = 2, onVal
   return (
     <div
       ref={parentRef}
-      className="relative h-32 w-32 cursor-pointer bg-neutral-700"
+      className="relative h-full w-full cursor-pointer bg-neutral-700"
       role="button"
       tabIndex={-1}
       onMouseDown={(e) => {

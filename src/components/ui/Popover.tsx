@@ -9,18 +9,20 @@ const PopoverTrigger = _Popover.Trigger;
 const PopoverContent = React.forwardRef<
   React.ElementRef<typeof _Popover.Content>,
   React.ComponentPropsWithoutRef<typeof _Popover.Content>
->((props, ref) => {
+  // eslint-disable-next-line react/prop-types
+>(({ className, ...props }, ref) => {
   return (
     <_Popover.Portal>
       <_Popover.Content
         ref={ref}
         // eslint-disable-next-line tailwindcss/no-custom-classname
         className={cn(
-          "mt-1 min-w-[384px] rounded-lg p-4",
+          "mt-1 rounded-lg p-4",
           "border border-neutral-200 bg-white shadow-lg",
           "focus:outline-none",
           "data-[state='open']:data-[side='top']:animate-fade-in-down",
-          "data-[state='open']:data-[side='bottom']:animate-fade-in-up"
+          "data-[state='open']:data-[side='bottom']:animate-fade-in-up",
+          className
         )}
         {...props}
       />

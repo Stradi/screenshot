@@ -14,6 +14,16 @@ export type TImageOptions = {
   roundness: number;
   aspectRatio: TAspectRatio;
   adaptive: boolean;
+  shadow: {
+    strength: number;
+    direction: [number, number];
+    adaptiveColor: boolean;
+    color: {
+      h: number;
+      s: number;
+      l: number;
+    };
+  };
 };
 
 export interface EditorContextProps {
@@ -45,6 +55,16 @@ export function EditorProvider({ children, defaultValues }: EditorProviderProps)
         roundness: 16,
         aspectRatio: "4:3",
         adaptive: true,
+        shadow: {
+          strength: 5,
+          direction: [0, 0],
+          adaptiveColor: true,
+          color: {
+            h: 0,
+            s: 0,
+            l: 0,
+          },
+        },
       } as TImageOptions)
   );
 

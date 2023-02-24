@@ -1,13 +1,10 @@
 import { useEditor } from "../../context/EditorContext";
-import Button from "../ui/Button";
-import Popover from "../ui/Popover";
 import Slider from "../ui/Slider";
-import AspectRatioButton from "./AspectRatioButton";
 import AspectRatioSelector from "./AspectRatioSelector";
+import ShadowOptions from "./ShadowOptions";
 
 export default function Editor() {
   const editor = useEditor();
-
   return (
     <div className="space-y-4">
       <Slider
@@ -29,6 +26,7 @@ export default function Editor() {
         }}
       />
       <AspectRatioSelector />
+      <ShadowOptions />
     </div>
   );
 }
