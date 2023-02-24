@@ -111,7 +111,6 @@ export default function CoordinateInput({ min = 0, max = 1, precision = 2, onVal
           setEventListeners();
         }}
         onKeyDown={(e) => {
-          e.preventDefault();
           if (!parentRect || !draggableRect) return;
 
           const axis = e.key === "ArrowUp" || e.key === "ArrowDown" ? "y" : "x";
