@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import useWindowSize from "../../hooks/useWindowSize";
-import { mapRange } from "../../utils/math";
+import { clamp, mapRange } from "../../utils/math";
 
 interface Props {
   min?: number;
@@ -28,13 +28,16 @@ export default function CoordinateInput({ min = 0, max = 1, precision = 2, onVal
   const draggableWidth = draggableRect?.width ?? 0;
   const draggableHeight = draggableRect?.height ?? 0;
 
+  const availableWidth = parentWidth - draggableWidth;
+  const availableHeight = parentHeight - draggableHeight;
+
   // We could use useMemo here but it's probably not worth it.
   const normalizedX = Number.parseFloat(
-    mapRange(x, 0, parentWidth - draggableWidth, min, max).toFixed(precision)
+    mapRange(x, 0, availableWidth, min, max).toFixed(precision)
   );
 
   const normalizedY = Number.parseFloat(
-    mapRange(y, 0, parentHeight - draggableHeight, min, max).toFixed(precision)
+    mapRange(y, 0, availableHeight, min, max).toFixed(precision)
   );
 
   useEffect(() => {
@@ -57,17 +60,8 @@ export default function CoordinateInput({ min = 0, max = 1, precision = 2, onVal
     const x = e.clientX - parentRect.left - offsetX;
     const y = e.clientY - parentRect.top - offsetY;
 
-    if (x < 0 || x > parentWidth - draggableWidth) {
-      setX(x < 0 ? 0 : parentWidth - draggableWidth);
-    } else {
-      setX(x);
-    }
-
-    if (y < 0 || y > parentHeight - draggableHeight) {
-      setY(y < 0 ? 0 : parentHeight - draggableHeight);
-    } else {
-      setY(y);
-    }
+    setX(clamp(x, 0, availableWidth));
+    setY(clamp(y, 0, availableHeight));
   }
 
   function setEventListeners() {
@@ -90,22 +84,15 @@ export default function CoordinateInput({ min = 0, max = 1, precision = 2, onVal
         e.preventDefault();
         if (!parentRect || !draggableRect) return;
 
+        draggableRef.current?.focus();
+
         const offsetX = draggableWidth / 2;
         const offsetY = draggableHeight / 2;
         const newX = e.clientX - parentRect.left - offsetX;
         const newY = e.clientY - parentRect.top - offsetY;
 
-        if (newX < 0 || newX > parentWidth - draggableWidth) {
-          setX(newX < 0 ? 0 : parentWidth - draggableWidth);
-        } else {
-          setX(newX);
-        }
-
-        if (newY < 0 || newY > parentHeight - draggableHeight) {
-          setY(newY < 0 ? 0 : parentHeight - draggableHeight);
-        } else {
-          setY(newY);
-        }
+        setX(clamp(newX, 0, availableWidth));
+        setY(clamp(newY, 0, availableHeight));
 
         setEventListeners();
       }}
@@ -119,28 +106,32 @@ export default function CoordinateInput({ min = 0, max = 1, precision = 2, onVal
           e.preventDefault();
           if (!parentRect || !draggableRect) return;
 
+          draggableRef.current?.focus();
+
           setEventListeners();
         }}
         onKeyDown={(e) => {
           e.preventDefault();
           if (!parentRect || !draggableRect) return;
 
-          const increment = e.getModifierState("Shift") ? 10 : 1;
+          const axis = e.key === "ArrowUp" || e.key === "ArrowDown" ? "y" : "x";
+          const stepCount = e.shiftKey ? 5 : 10;
+          const increment = axis === "x" ? availableWidth / stepCount : availableHeight / stepCount;
 
           if (e.key === "ArrowUp") {
-            setY(y - increment);
+            setY(clamp(y - increment, 0, availableHeight));
           }
 
           if (e.key === "ArrowDown") {
-            setY(y + increment);
+            setY(clamp(y + increment, 0, availableHeight));
           }
 
           if (e.key === "ArrowLeft") {
-            setX(x - increment);
+            setX(clamp(x - increment, 0, availableWidth));
           }
 
           if (e.key === "ArrowRight") {
-            setX(x + increment);
+            setX(clamp(x + increment, 0, availableWidth));
           }
         }}
         style={{ transform: `translate(${x}px, ${y}px)` }}
