@@ -1,8 +1,24 @@
+import React from "react";
 import { useEditor } from "../context/EditorContext";
 import { cn } from "../utils/tw";
 
 export default function Canvas() {
   const editor = useEditor();
+
+  const imageRef = React.useRef<HTMLImageElement>(null);
+  const headerRef = React.useRef<HTMLDivElement>(null);
+
+  const memoizedMaxHeight = React.useMemo(() => {
+    if (editor.imageOptions.adaptive) {
+      return "100%";
+    }
+    const imageHeight = imageRef.current?.clientHeight;
+    const headerHeight = headerRef.current?.clientHeight;
+
+    if (imageHeight && headerHeight) {
+      return `${imageHeight + headerHeight}px`;
+    }
+  }, [editor.imageOptions.adaptive]);
 
   const aspectRatioToTailwindClass = {
     "1:1": "aspect-square",
@@ -31,15 +47,18 @@ export default function Canvas() {
           className={cn(
             "shadow-2xl shadow-black/75",
             "overflow-hidden",
-            editor.imageOptions.adaptive ? "max-h-full" : "h-auto"
+            "transition-[max-height] duration-300 ease-in-out"
           )}
           style={{
             borderRadius: `${editor.imageOptions.roundness}px`,
             scale: `${editor.imageOptions.scale / 100}`,
+            maxHeight: memoizedMaxHeight,
           }}
         >
-          <div className={cn("h-8 w-full", "bg-black text-center text-white")}>Header</div>
-          <img src="https://placekitten.com/1024/767" alt="Kitten" />
+          <div ref={headerRef} className={cn("h-8 w-full", "bg-black text-center text-white")}>
+            Header
+          </div>
+          <img ref={imageRef} src="https://placekitten.com/1024/767" alt="Kitten" />
         </div>
       </div>
     </div>
