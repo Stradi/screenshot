@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import useWindowSize from "../../hooks/useWindowSize";
 import { mapRange } from "../../utils/math";
 
 interface Props {
@@ -10,6 +11,8 @@ interface Props {
 }
 
 export default function CoordinateInput({ min = 0, max = 1, precision = 2, onValueChange }: Props) {
+  const windowDimensions = useWindowSize();
+
   const [x, setX] = useState(0);
   const [y, setY] = useState(0);
 
@@ -43,6 +46,11 @@ export default function CoordinateInput({ min = 0, max = 1, precision = 2, onVal
     setParentRect(parentRef.current?.getBoundingClientRect() ?? null);
     setDraggableRect(draggableRef.current?.getBoundingClientRect() ?? null);
   }, [parentRef.current, draggableRef.current]);
+
+  useEffect(() => {
+    setParentRect(parentRef.current?.getBoundingClientRect() ?? null);
+    setDraggableRect(draggableRef.current?.getBoundingClientRect() ?? null);
+  }, [windowDimensions.width, windowDimensions.height]);
 
   function onMouseMove(e: MouseEvent) {
     e.preventDefault();
