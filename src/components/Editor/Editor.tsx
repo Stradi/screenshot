@@ -1,11 +1,15 @@
-import { useEditor } from "../context/EditorContext";
-import Slider from "./ui/Slider";
+import { useEditor } from "../../context/EditorContext";
+import Button from "../ui/Button";
+import Popover from "../ui/Popover";
+import Slider from "../ui/Slider";
+import AspectRatioButton from "./AspectRatioButton";
+import AspectRatioSelector from "./AspectRatioSelector";
 
 export default function Editor() {
   const editor = useEditor();
 
   return (
-    <div>
+    <div className="space-y-4">
       <Slider
         name="Roundness"
         min={0}
@@ -24,6 +28,7 @@ export default function Editor() {
           editor.setImageOptions({ ...editor.imageOptions, scale: value });
         }}
       />
+      <AspectRatioSelector />
     </div>
   );
 }

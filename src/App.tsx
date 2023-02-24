@@ -1,6 +1,6 @@
 import Canvas from "./components/Canvas";
 import Container from "./components/Container";
-import Editor from "./components/Editor";
+import Editor from "./components/Editor/Editor";
 import { cn } from "./utils/tw";
 
 export default function App() {
