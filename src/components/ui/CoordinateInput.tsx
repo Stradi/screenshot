@@ -45,12 +45,7 @@ export default function CoordinateInput({ min = 0, max = 1, precision = 2, onVal
   useEffect(() => {
     setParentRect(parentRef.current?.getBoundingClientRect() ?? null);
     setDraggableRect(draggableRef.current?.getBoundingClientRect() ?? null);
-  }, [parentRef.current, draggableRef.current]);
-
-  useEffect(() => {
-    setParentRect(parentRef.current?.getBoundingClientRect() ?? null);
-    setDraggableRect(draggableRef.current?.getBoundingClientRect() ?? null);
-  }, [windowDimensions.width, windowDimensions.height]);
+  }, [parentRef.current, draggableRef.current, windowDimensions.width, windowDimensions.height]);
 
   function onMouseMove(e: MouseEvent) {
     e.preventDefault();
@@ -125,6 +120,28 @@ export default function CoordinateInput({ min = 0, max = 1, precision = 2, onVal
           if (!parentRect || !draggableRect) return;
 
           setEventListeners();
+        }}
+        onKeyDown={(e) => {
+          e.preventDefault();
+          if (!parentRect || !draggableRect) return;
+
+          const increment = e.getModifierState("Shift") ? 10 : 1;
+
+          if (e.key === "ArrowUp") {
+            setY(y - increment);
+          }
+
+          if (e.key === "ArrowDown") {
+            setY(y + increment);
+          }
+
+          if (e.key === "ArrowLeft") {
+            setX(x - increment);
+          }
+
+          if (e.key === "ArrowRight") {
+            setX(x + increment);
+          }
         }}
         style={{ transform: `translate(${x}px, ${y}px)` }}
       ></div>
