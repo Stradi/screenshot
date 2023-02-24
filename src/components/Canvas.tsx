@@ -24,18 +24,18 @@ export default function Canvas() {
           "flex max-h-full items-center overflow-hidden",
           "bg-gradient-to-tr from-red-500 to-blue-700",
           "transition-[aspect-ratio] duration-300 ease-in-out",
-          aspectRatioToTailwindClass[editor.aspectRatio]
+          aspectRatioToTailwindClass[editor.imageOptions.aspectRatio]
         )}
       >
         <div
           className={cn(
             "shadow-2xl shadow-black/75",
             "overflow-hidden",
-            editor.adapt ? "max-h-full" : "h-auto"
+            editor.imageOptions.adaptive ? "max-h-full" : "h-auto"
           )}
           style={{
-            borderRadius: `${editor.roundness}px`,
-            scale: `${editor.size / 100}`,
+            borderRadius: `${editor.imageOptions.roundness}px`,
+            scale: `${editor.imageOptions.scale / 100}`,
           }}
         >
           <div className={cn("h-8 w-full", "bg-black text-center text-white")}>Header</div>

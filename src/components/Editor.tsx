@@ -5,23 +5,23 @@ export default function Editor() {
   const editor = useEditor();
 
   return (
-    <div className="space-y-4">
+    <div>
       <Slider
-        onValueChange={([value]) => {
-          editor.setRoundness(value);
-        }}
         name="Roundness"
-        defaultValue={[editor.roundness]}
         min={0}
         max={24}
+        defaultValue={[editor.imageOptions.roundness]}
+        onValueChange={([value]) => {
+          editor.setImageOptions({ ...editor.imageOptions, roundness: value });
+        }}
       />
       <Slider
-        name="Size"
-        defaultValue={[editor.size]}
+        name="Scale"
         min={25}
         max={150}
+        defaultValue={[editor.imageOptions.scale]}
         onValueChange={([value]) => {
-          editor.setSize(value);
+          editor.setImageOptions({ ...editor.imageOptions, scale: value });
         }}
       />
     </div>

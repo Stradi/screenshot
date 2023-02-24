@@ -1,20 +1,30 @@
 import { createContext, useContext, useRef, useState } from "react";
 import { toPng, toJpeg } from "html-to-image";
 
+export type TAspectRatio = "1:1" | "4:3" | "16:9" | "21:9";
+export type TExportOptions = {
+  width: number;
+  quality: number;
+  scale: number;
+  format: "png" | "jpeg";
+};
+
+export type TImageOptions = {
+  scale: number;
+  roundness: number;
+  aspectRatio: TAspectRatio;
+  adaptive: boolean;
+};
+
 export interface EditorContextProps {
   imageRef: React.RefObject<HTMLElement>;
 
-  size: number;
-  roundness: number;
-  aspectRatio: TAspectRatio;
-  adapt: boolean;
-  setSize: (value: number) => void;
-  setRoundness: (value: number) => void;
-  setAspectRatio: (value: TAspectRatio) => void;
-  setAdapt: (value: boolean) => void;
-
+  imageOptions: TImageOptions;
   exportOptions: TExportOptions;
+
+  setImageOptions: (value: TImageOptions) => void;
   setExportOptions: (value: TExportOptions) => void;
+
   exportImage: () => void;
 }
 
@@ -28,10 +38,16 @@ export type EditorProviderProps = React.PropsWithChildren<{
 }>;
 
 export function EditorProvider({ children, defaultValues }: EditorProviderProps) {
-  const [size, setSize] = useState(defaultValues?.size ?? 0);
-  const [roundness, setRoundness] = useState(defaultValues?.roundness ?? 0);
-  const [aspectRatio, setAspectRatio] = useState(defaultValues?.aspectRatio ?? "1:1");
-  const [adapt, setAdapt] = useState(defaultValues?.adapt ?? false);
+  const [imageOptions, setImageOptions] = useState(
+    defaultValues?.imageOptions ??
+      ({
+        scale: 75,
+        roundness: 16,
+        aspectRatio: "4:3",
+        adaptive: true,
+      } as TImageOptions)
+  );
+
   const [exportOptions, setExportOptions] = useState(
     defaultValues?.exportOptions ??
       ({
@@ -47,7 +63,7 @@ export function EditorProvider({ children, defaultValues }: EditorProviderProps)
   function exportImage() {
     if (!imageRef.current) return Promise.reject("No image to export");
 
-    const parsedAspectRatio = aspectRatio.split(":");
+    const parsedAspectRatio = imageOptions.aspectRatio.split(":");
     const aspectWidth = Number.parseInt(parsedAspectRatio[0]);
     const aspectHeight = Number.parseInt(parsedAspectRatio[1]);
 
@@ -71,17 +87,12 @@ export function EditorProvider({ children, defaultValues }: EditorProviderProps)
   const values = {
     imageRef,
 
-    size,
-    roundness,
-    aspectRatio,
-    adapt,
-    setSize,
-    setRoundness,
-    setAspectRatio,
-    setAdapt,
-
+    imageOptions,
     exportOptions,
+
+    setImageOptions,
     setExportOptions,
+
     exportImage,
   };
 
