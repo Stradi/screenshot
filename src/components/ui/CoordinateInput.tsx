@@ -1,16 +1,24 @@
 import { useEffect, useRef, useState } from "react";
 import useWindowSize from "../../hooks/useWindowSize";
 import { clamp, mapRange } from "../../utils/math";
+import { cn } from "../../utils/tw";
 
 interface Props {
   min?: number;
   max?: number;
-  precision?: number;
+  rows?: number;
+  columns?: number;
 
   onValueChange?: (value: [number, number]) => void;
 }
 
-export default function CoordinateInput({ min = 0, max = 1, precision = 2, onValueChange }: Props) {
+export default function CoordinateInput({
+  min = 0,
+  max = 1,
+  rows = 5,
+  columns = 5,
+  onValueChange,
+}: Props) {
   const windowDimensions = useWindowSize();
 
   const [x, setX] = useState(0);
@@ -32,13 +40,11 @@ export default function CoordinateInput({ min = 0, max = 1, precision = 2, onVal
   const availableHeight = parentHeight - draggableHeight;
 
   // We could use useMemo here but it's probably not worth it.
-  const normalizedX = Number.parseFloat(
-    mapRange(x, 0, availableWidth, min, max).toFixed(precision)
-  );
+  const normalizedX = Number.parseFloat(mapRange(x, 0, availableWidth, min, max).toFixed(2));
+  const normalizedY = Number.parseFloat(mapRange(y, 0, availableHeight, min, max).toFixed(2));
 
-  const normalizedY = Number.parseFloat(
-    mapRange(y, 0, availableHeight, min, max).toFixed(precision)
-  );
+  const stepSizeX = availableWidth / (columns - 1);
+  const stepSizeY = availableHeight / (rows - 1);
 
   useEffect(() => {
     if (!parentRect || !draggableRect) return;
@@ -50,18 +56,33 @@ export default function CoordinateInput({ min = 0, max = 1, precision = 2, onVal
     setDraggableRect(draggableRef.current?.getBoundingClientRect() ?? null);
   }, [parentRef.current, draggableRef.current, windowDimensions.width, windowDimensions.height]);
 
-  function onMouseMove(e: MouseEvent) {
-    e.preventDefault();
-    if (!parentRect || !draggableRect) return;
+  function xyToGrid(x: number, y: number) {
+    if (!parentRect || !draggableRect) return [0, 0];
+
+    const stepSizeX = availableWidth / (columns - 1);
+    const stepSizeY = availableHeight / (rows - 1);
 
     const offsetX = draggableWidth / 2;
     const offsetY = draggableHeight / 2;
 
-    const x = e.clientX - parentRect.left - offsetX;
-    const y = e.clientY - parentRect.top - offsetY;
+    const newX = x - parentRect.left - offsetX;
+    const newY = y - parentRect.top - offsetY;
 
-    setX(clamp(x, 0, availableWidth));
-    setY(clamp(y, 0, availableHeight));
+    const clampedX = clamp(newX, 0, availableWidth);
+    const clampedY = clamp(newY, 0, availableHeight);
+
+    const snappedX = Math.round(clampedX / stepSizeX) * stepSizeX;
+    const snappedY = Math.round(clampedY / stepSizeY) * stepSizeY;
+
+    return [snappedX, snappedY];
+  }
+
+  function onMouseMove(e: MouseEvent) {
+    e.preventDefault();
+
+    const [snappedX, snappedY] = xyToGrid(e.clientX, e.clientY);
+    setX(snappedX);
+    setY(snappedY);
   }
 
   function setEventListeners() {
@@ -77,7 +98,11 @@ export default function CoordinateInput({ min = 0, max = 1, precision = 2, onVal
   return (
     <div
       ref={parentRef}
-      className="relative h-full w-full cursor-pointer bg-neutral-700"
+      className={cn(
+        "relative h-full w-full bg-neutral-100",
+        "cursor-pointer rounded-md border border-neutral-300",
+        "text-neutral-300 focus-within:ring-2 focus-within:ring-neutral-900 focus-within:ring-offset-2"
+      )}
       role="button"
       tabIndex={-1}
       onMouseDown={(e) => {
@@ -86,54 +111,61 @@ export default function CoordinateInput({ min = 0, max = 1, precision = 2, onVal
 
         draggableRef.current?.focus();
 
-        const offsetX = draggableWidth / 2;
-        const offsetY = draggableHeight / 2;
-        const newX = e.clientX - parentRect.left - offsetX;
-        const newY = e.clientY - parentRect.top - offsetY;
-
-        setX(clamp(newX, 0, availableWidth));
-        setY(clamp(newY, 0, availableHeight));
+        const [snappedX, snappedY] = xyToGrid(e.clientX, e.clientY);
+        setX(snappedX);
+        setY(snappedY);
 
         setEventListeners();
+      }}
+      style={{
+        backgroundImage: `
+          linear-gradient(to right, currentColor 1px, transparent 1px),
+          linear-gradient(to bottom, currentColor 1px, transparent 1px)`,
+        backgroundSize: `${stepSizeX}px ${stepSizeY}px`,
+        backgroundPosition: `${draggableWidth / 2}px ${draggableHeight / 2}px`,
       }}
     >
       <div
         ref={draggableRef}
         role="button"
         tabIndex={0}
-        className="absolute h-4 w-4 cursor-grab rounded-full border border-black bg-white active:cursor-grabbing"
+        className={cn(
+          "absolute h-4 w-4 cursor-grab",
+          "rounded-full bg-neutral-900 transition-all duration-100",
+          "focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:ring-offset-2"
+        )}
         onMouseDown={(e) => {
           e.preventDefault();
-          if (!parentRect || !draggableRect) return;
-
           draggableRef.current?.focus();
 
           setEventListeners();
         }}
         onKeyDown={(e) => {
+          e.preventDefault();
+
           if (!parentRect || !draggableRect) return;
 
-          const axis = e.key === "ArrowUp" || e.key === "ArrowDown" ? "y" : "x";
-          const stepCount = e.shiftKey ? 5 : 10;
-          const increment = axis === "x" ? availableWidth / stepCount : availableHeight / stepCount;
+          const stepSizeX = availableWidth / (columns - 1);
+          const stepSizeY = availableHeight / (rows - 1);
 
-          if (e.key === "ArrowUp") {
-            setY(clamp(y - increment, 0, availableHeight));
-          }
-
-          if (e.key === "ArrowDown") {
-            setY(clamp(y + increment, 0, availableHeight));
-          }
-
-          if (e.key === "ArrowLeft") {
-            setX(clamp(x - increment, 0, availableWidth));
-          }
-
-          if (e.key === "ArrowRight") {
-            setX(clamp(x + increment, 0, availableWidth));
+          switch (e.key) {
+            case "ArrowUp":
+              setY((prev) => clamp(prev - stepSizeY, 0, availableHeight));
+              break;
+            case "ArrowDown":
+              setY((prev) => clamp(prev + stepSizeY, 0, availableHeight));
+              break;
+            case "ArrowLeft":
+              setX((prev) => clamp(prev - stepSizeX, 0, availableWidth));
+              break;
+            case "ArrowRight":
+              setX((prev) => clamp(prev + stepSizeX, 0, availableWidth));
+              break;
           }
         }}
-        style={{ transform: `translate(${x}px, ${y}px)` }}
+        style={{
+          transform: `translate(${x}px, ${y}px)`,
+        }}
       ></div>
     </div>
   );

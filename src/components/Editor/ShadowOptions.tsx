@@ -52,6 +52,7 @@ export default function ShadowOptions() {
                   });
                 }}
               />
+              <p>{editor.imageOptions.shadow.direction}</p>
             </div>
             <div className="h-full space-y-2">
               <p>Color</p>
