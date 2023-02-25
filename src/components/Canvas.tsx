@@ -1,5 +1,6 @@
 import React from "react";
 import { useEditor } from "../context/EditorContext";
+import { shadowBuilder } from "../utils/shadow";
 import { cn } from "../utils/tw";
 
 export default function Canvas() {
@@ -44,15 +45,12 @@ export default function Canvas() {
         )}
       >
         <div
-          className={cn(
-            "shadow-2xl shadow-black/75",
-            "overflow-hidden",
-            "transition-[max-height] duration-300 ease-in-out"
-          )}
+          className={cn("overflow-hidden", "transition-[max-height] duration-300 ease-in-out")}
           style={{
             borderRadius: `${editor.imageOptions.roundness}px`,
             scale: `${editor.imageOptions.scale / 100}`,
             maxHeight: memoizedMaxHeight,
+            boxShadow: shadowBuilder(editor.imageOptions.shadow),
           }}
         >
           <div ref={headerRef} className={cn("h-8 w-full", "bg-black text-center text-white")}>

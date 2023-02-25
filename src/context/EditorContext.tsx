@@ -8,22 +8,23 @@ export type TExportOptions = {
   scale: number;
   format: "png" | "jpeg";
 };
+export type TShadowOptions = {
+  strength: number;
+  direction: [number, number];
+  adaptiveColor: boolean;
+  color: {
+    h: number;
+    s: number;
+    l: number;
+  };
+};
 
 export type TImageOptions = {
   scale: number;
   roundness: number;
   aspectRatio: TAspectRatio;
   adaptive: boolean;
-  shadow: {
-    strength: number;
-    direction: [number, number];
-    adaptiveColor: boolean;
-    color: {
-      h: number;
-      s: number;
-      l: number;
-    };
-  };
+  shadow: TShadowOptions;
 };
 
 export interface EditorContextProps {
@@ -56,8 +57,8 @@ export function EditorProvider({ children, defaultValues }: EditorProviderProps)
         aspectRatio: "4:3",
         adaptive: true,
         shadow: {
-          strength: 5,
-          direction: [0, 0],
+          strength: 4,
+          direction: [0, -1],
           adaptiveColor: true,
           color: {
             h: 0,
