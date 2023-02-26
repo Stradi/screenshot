@@ -16,7 +16,7 @@ export default function ShadowOptions() {
       </Popover.Trigger>
       <Popover.Content onOpenAutoFocus={(e) => e.preventDefault()} className="min-w-[384px]">
         <div className="flex flex-col gap-4">
-          <p className="border-b-2 border-b-neutral-200 text-sm text-neutral-500">
+          <p className="border-b-2 border-b-neutral-200 text-sm font-medium text-neutral-500">
             Modify shadow settings
           </p>
           <div className="grid grid-cols-2 gap-4">
@@ -38,7 +38,7 @@ export default function ShadowOptions() {
               />
             </div>
             <div className="aspect-square space-y-2">
-              <p>Light Direction</p>
+              <p className="text-sm font-medium">Light Direction</p>
               <CoordinateInput
                 min={-1}
                 max={1}
@@ -55,7 +55,7 @@ export default function ShadowOptions() {
               />
             </div>
             <div className="h-full space-y-2">
-              <p>Color</p>
+              <p className="text-sm font-medium">Color</p>
               <div className="flex h-full flex-col gap-2">
                 <Popover>
                   <Popover.Trigger asChild>

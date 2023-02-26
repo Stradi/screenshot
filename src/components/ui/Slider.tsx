@@ -14,7 +14,7 @@ export default function Slider({ defaultValue, name, onValueChange, ...props }: 
 
   return (
     <div className={cn("grid grid-cols-12 items-center gap-4")}>
-      <label className={cn("col-span-4 truncate")} htmlFor={name}>
+      <label className={cn("col-span-4 truncate font-medium")} htmlFor={name}>
         {name}
       </label>
 
@@ -40,7 +40,7 @@ export default function Slider({ defaultValue, name, onValueChange, ...props }: 
         className={cn(
           "col-span-2 rounded-lg px-1 py-0.5",
           "border-2 border-neutral-300",
-          "text-center font-mono text-sm font-bold"
+          "select-none text-center text-sm font-medium"
         )}
       >
         {value}

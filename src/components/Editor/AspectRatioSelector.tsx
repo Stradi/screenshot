@@ -14,7 +14,7 @@ export default function AspectRatioSelector() {
       </Popover.Trigger>
       <Popover.Content onOpenAutoFocus={(e) => e.preventDefault()}>
         <div className="flex flex-col gap-4">
-          <p className="border-b-2 border-b-neutral-200 text-sm text-neutral-500">
+          <p className="border-b-2 border-b-neutral-200 text-sm font-medium text-neutral-500">
             Select aspect ratio
           </p>
           <div>

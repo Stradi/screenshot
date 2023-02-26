@@ -3,6 +3,9 @@ module.exports = {
   content: ["./index.html", "./src/**/*.{ts,tsx}"],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ["GeneralSans-Variable", "sans-serif"],
+      },
       keyframes: {
         "fade-in-down": {
           from: {
