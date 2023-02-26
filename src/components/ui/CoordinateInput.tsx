@@ -159,8 +159,6 @@ export default function CoordinateInput({
           setEventListeners();
         }}
         onKeyDown={(e) => {
-          e.preventDefault();
-
           if (!parentRect || !draggableRect) return;
 
           const stepSizeX = availableWidth / (columns - 1);
