@@ -1,9 +1,13 @@
+import Dropzone from "./components/Dropzone";
 import Canvas from "./components/Canvas";
 import Container from "./components/Container";
 import Editor from "./components/Editor/Editor";
 import { cn } from "./utils/tw";
+import { useEditor } from "./context/EditorContext";
 
 export default function App() {
+  const editor = useEditor();
+
   return (
     <main className="flex h-screen flex-col">
       <nav>Navigation Bar</nav>
@@ -14,9 +18,7 @@ export default function App() {
           "[&>*]:border [&>*]:border-neutral-200 [&>*]:bg-neutral-50"
         )}
       >
-        <div className="col-span-2">
-          <Canvas />
-        </div>
+        <div className="col-span-2">{editor.imageFile ? <Canvas /> : <Dropzone />}</div>
         <div className="col-span-1">
           <Editor />
         </div>

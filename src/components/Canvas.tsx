@@ -1,10 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useEditor } from "../context/EditorContext";
 import { shadowBuilder } from "../utils/shadow";
 import { cn } from "../utils/tw";
 
 export default function Canvas() {
   const editor = useEditor();
+
+  const [imageURL, setImageURL] = React.useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    if (editor.imageFile) {
+      setImageURL(URL.createObjectURL(editor.imageFile));
+    }
+  }, [editor.imageFile]);
 
   const imageRef = React.useRef<HTMLImageElement>(null);
   const headerRef = React.useRef<HTMLDivElement>(null);
@@ -56,15 +64,7 @@ export default function Canvas() {
           <div ref={headerRef} className={cn("h-8 w-full", "bg-black text-center text-white")}>
             Header
           </div>
-          <img
-            ref={imageRef}
-            src="https://placekitten.com/1024/768"
-            alt="Kitten"
-            // TODO: We added this because fast-average-color was complaining about it. Also this image
-            // url is only here for testing purposes.
-            // TLDR; delete this when we have image upload stuff.
-            crossOrigin="anonymous"
-          />
+          <img ref={imageRef} src={imageURL} alt="Preview" />
         </div>
       </div>
     </div>

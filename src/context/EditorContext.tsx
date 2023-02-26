@@ -34,9 +34,11 @@ export interface EditorContextProps {
 
   imageOptions: TImageOptions;
   exportOptions: TExportOptions;
+  imageFile: File | null;
 
   setImageOptions: (value: TImageOptions) => void;
   setExportOptions: (value: TExportOptions) => void;
+  setImageFile: (value: File | null) => void;
 
   exportImage: () => void;
 }
@@ -82,6 +84,7 @@ export function EditorProvider({ children, defaultValues }: EditorProviderProps)
   );
 
   const imageRef = useRef<HTMLElement>(null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
 
   function exportImage() {
     if (!imageRef.current) return Promise.reject("No image to export");
@@ -112,9 +115,11 @@ export function EditorProvider({ children, defaultValues }: EditorProviderProps)
 
     imageOptions,
     exportOptions,
+    imageFile,
 
     setImageOptions,
     setExportOptions,
+    setImageFile,
 
     exportImage,
   };
