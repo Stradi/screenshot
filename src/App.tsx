@@ -5,6 +5,7 @@ import { cn } from "./utils/tw";
 import { useEditor } from "./context/EditorContext";
 import NavigationBar from "./components/ui/NavigationBar";
 import config from "./config";
+import Footer from "./components/ui/Footer";
 
 export default function App() {
   const editor = useEditor();
@@ -29,7 +30,7 @@ export default function App() {
           <Editor />
         </div>
       </Container>
-      <footer>Footer</footer>
+      <Footer />
     </main>
   );
 }
