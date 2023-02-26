@@ -11,7 +11,7 @@ export default function NavigationBar({ items }: NavigationBarProps) {
     <NavigationMenu.Root
       className={cn(
         "relative flex justify-center p-2",
-        "border-b border-b-neutral-300 bg-neutral-100"
+        "border-b border-b-neutral-200 bg-neutral-50"
       )}
     >
       <NavigationMenu.List className="flex items-center gap-2">
