@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useWindowSize from "../../hooks/useWindowSize";
 import { clamp, mapRange } from "../../utils/math";
 import { cn } from "../../utils/tw";
