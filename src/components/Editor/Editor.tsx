@@ -11,7 +11,7 @@ export default function Editor() {
         name="Roundness"
         min={0}
         max={24}
-        defaultValue={[editor.imageOptions.roundness]}
+        value={[editor.imageOptions.roundness]}
         onValueChange={([value]) => {
           editor.setImageOptions({ ...editor.imageOptions, roundness: value });
         }}
@@ -20,7 +20,7 @@ export default function Editor() {
         name="Scale"
         min={25}
         max={150}
-        defaultValue={[editor.imageOptions.scale]}
+        value={[editor.imageOptions.scale]}
         onValueChange={([value]) => {
           editor.setImageOptions({ ...editor.imageOptions, scale: value });
         }}

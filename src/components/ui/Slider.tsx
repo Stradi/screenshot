@@ -1,14 +1,10 @@
 import * as _Slider from "@radix-ui/react-slider";
-import { useState } from "react";
 import { cn } from "../../utils/tw";
 
 type Props = _Slider.SliderProps;
 
-export default function Slider({ defaultValue, name, onValueChange, ...props }: Props) {
-  const [value, setValue] = useState(defaultValue);
-
+export default function Slider({ defaultValue, name, onValueChange, value, ...props }: Props) {
   function _onValueChange(newValue: number[]) {
-    setValue(newValue);
     onValueChange?.(newValue);
   }
 
@@ -43,7 +39,7 @@ export default function Slider({ defaultValue, name, onValueChange, ...props }: 
           "select-none text-center text-sm font-medium"
         )}
       >
-        {value}
+        {value ?? defaultValue}
       </span>
     </div>
   );

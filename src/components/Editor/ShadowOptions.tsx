@@ -25,7 +25,7 @@ export default function ShadowOptions() {
                 name="Strength"
                 min={0}
                 max={10}
-                defaultValue={[editor.imageOptions.shadow.strength]}
+                value={[editor.imageOptions.shadow.strength]}
                 onValueChange={(values) => {
                   editor.setImageOptions({
                     ...editor.imageOptions,
