@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import useWindowSize from "../../hooks/useWindowSize";
 import { clamp, mapRange } from "../../utils/math";
 import { cn } from "../../utils/tw";
@@ -8,15 +8,18 @@ interface Props {
   max?: number;
   rows?: number;
   columns?: number;
+  defaultValues?: [number, number];
 
   onValueChange?: (value: [number, number]) => void;
 }
 
+// TODO: I should probably refactor this.
 export default function CoordinateInput({
   min = 0,
   max = 1,
   rows = 5,
   columns = 5,
+  defaultValues = [0, 0],
   onValueChange,
 }: Props) {
   const windowDimensions = useWindowSize();
@@ -47,6 +50,24 @@ export default function CoordinateInput({
   const stepSizeY = availableHeight / (rows - 1);
 
   useEffect(() => {
+    const parentW = parentRef.current?.getBoundingClientRect().width ?? 0;
+    const parentH = parentRef.current?.getBoundingClientRect().height ?? 0;
+
+    const draggableW = draggableRef.current?.getBoundingClientRect().width ?? 0;
+    const draggableH = draggableRef.current?.getBoundingClientRect().height ?? 0;
+
+    const availableW = parentW - draggableW;
+    const availableH = parentH - draggableH;
+
+    const [defaultX, defaultY] = defaultValues;
+    const pixX = mapRange(defaultX, min, max, 0, availableW);
+    const pixY = mapRange(defaultY, min, max, 0, availableH);
+
+    setX(pixX);
+    setY(pixY);
+  }, []);
+
+  useEffect(() => {
     if (!parentRect || !draggableRect) return;
     onValueChange?.([normalizedX, normalizedY]);
   }, [x, y]);
@@ -58,9 +79,6 @@ export default function CoordinateInput({
 
   function xyToGrid(x: number, y: number) {
     if (!parentRect || !draggableRect) return [0, 0];
-
-    const stepSizeX = availableWidth / (columns - 1);
-    const stepSizeY = availableHeight / (rows - 1);
 
     const offsetX = draggableWidth / 2;
     const offsetY = draggableHeight / 2;

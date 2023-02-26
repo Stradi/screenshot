@@ -42,6 +42,7 @@ export default function ShadowOptions() {
               <CoordinateInput
                 min={-1}
                 max={1}
+                defaultValues={editor.imageOptions.shadow.direction}
                 onValueChange={(values) => {
                   editor.setImageOptions({
                     ...editor.imageOptions,
