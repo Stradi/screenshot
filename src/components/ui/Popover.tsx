@@ -9,7 +9,6 @@ const PopoverTrigger = _Popover.Trigger;
 const PopoverContent = React.forwardRef<
   React.ElementRef<typeof _Popover.Content>,
   React.ComponentPropsWithoutRef<typeof _Popover.Content>
-  // eslint-disable-next-line react/prop-types
 >(({ className, ...props }, ref) => {
   return (
     <_Popover.Portal>

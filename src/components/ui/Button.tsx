@@ -19,7 +19,6 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       lg = false,
       fullWidth = false,
       active = false,
-      // eslint-disable-next-line react/prop-types
       className,
       ...props
     },

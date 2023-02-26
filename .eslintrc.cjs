@@ -13,23 +13,24 @@ module.exports = {
     {
       files: ["*.ts", "*.tsx"],
       parser: "@typescript-eslint/parser",
-    }
+    },
   ],
   settings: {
     react: {
-      version: "detect"
+      version: "detect",
     },
     "import/resolver": {
       node: {
-        paths: ['src'],
-        extensions: [".js", ".jsx", ".ts", ".tsx"]
-      }
+        paths: ["src"],
+        extensions: [".js", ".jsx", ".ts", ".tsx"],
+      },
     },
-    "tailwindcss": {
-      "callees": ["cn"]
-    }
+    tailwindcss: {
+      callees: ["cn"],
+    },
   },
   rules: {
     "react/react-in-jsx-scope": "off",
-  }
-}
+    "react/prop-types": "off",
+  },
+};
