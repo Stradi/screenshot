@@ -56,7 +56,15 @@ export default function Canvas() {
           <div ref={headerRef} className={cn("h-8 w-full", "bg-black text-center text-white")}>
             Header
           </div>
-          <img ref={imageRef} src="https://placekitten.com/1024/767" alt="Kitten" />
+          <img
+            ref={imageRef}
+            src="https://placekitten.com/1024/768"
+            alt="Kitten"
+            // TODO: We added this because fast-average-color was complaining about it. Also this image
+            // url is only here for testing purposes.
+            // TLDR; delete this when we have image upload stuff.
+            crossOrigin="anonymous"
+          />
         </div>
       </div>
     </div>

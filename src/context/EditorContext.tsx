@@ -1,5 +1,7 @@
-import { createContext, useContext, useRef, useState } from "react";
+import { FastAverageColor } from "fast-average-color";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { toPng, toJpeg } from "html-to-image";
+import { rgbToHsl } from "../utils/math";
 
 export type TAspectRatio = "1:1" | "4:3" | "16:9" | "21:9";
 export type TExportOptions = {
@@ -116,6 +118,29 @@ export function EditorProvider({ children, defaultValues }: EditorProviderProps)
 
     exportImage,
   };
+
+  useEffect(() => {
+    const fac = new FastAverageColor();
+    const imgElement = imageRef.current?.querySelector("img");
+    if (!imgElement) return;
+
+    const color = fac.getColor(imgElement, {
+      algorithm: "dominant",
+    }).value;
+    const hsl = rgbToHsl(color[0], color[1], color[2]);
+
+    setImageOptions((prev) => ({
+      ...prev,
+      shadow: {
+        ...prev.shadow,
+        color: {
+          h: hsl[0],
+          s: hsl[1],
+          l: hsl[2],
+        },
+      },
+    }));
+  }, [imageOptions.shadow.adaptiveColor, imageRef.current]);
 
   return <EditorContext.Provider value={values}>{children}</EditorContext.Provider>;
 }
