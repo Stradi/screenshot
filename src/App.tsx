@@ -3,13 +3,15 @@ import Container from "./components/Container";
 import { Editor } from "./components/Editor";
 import { cn } from "./utils/tw";
 import { useEditor } from "./context/EditorContext";
+import NavigationBar from "./components/ui/NavigationBar";
+import config from "./config";
 
 export default function App() {
   const editor = useEditor();
 
   return (
-    <main className="flex h-screen flex-col">
-      <nav>Navigation Bar</nav>
+    <main className="flex h-screen flex-col gap-4">
+      <NavigationBar items={config.navigation} />
       <Container
         className={cn(
           "grid grow grid-cols-3 gap-4",
