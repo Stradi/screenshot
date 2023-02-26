@@ -6,9 +6,12 @@ import { rgbToHsl } from "../utils/math";
 export type TAspectRatio = "1:1" | "4:3" | "16:9" | "21:9";
 export type TExportOptions = {
   width: number;
+  height: number;
   quality: number;
   scale: number;
   format: "png" | "jpeg";
+
+  status: "exporting" | "idle";
 };
 export type TShadowOptions = {
   strength: number;
@@ -80,18 +83,28 @@ export function EditorProvider({ children, defaultValues }: EditorProviderProps)
         quality: 0.95,
         scale: 1,
         width: 1000,
+        height: 1000,
+        status: "idle",
       } as TExportOptions)
   );
 
   const imageRef = useRef<HTMLElement>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
 
-  function exportImage() {
-    if (!imageRef.current) return Promise.reject("No image to export");
-
+  useEffect(() => {
     const parsedAspectRatio = imageOptions.aspectRatio.split(":");
     const aspectWidth = Number.parseInt(parsedAspectRatio[0]);
     const aspectHeight = Number.parseInt(parsedAspectRatio[1]);
+
+    setExportOptions((prev) => ({
+      ...prev,
+      height: Math.round(prev.width * (aspectHeight / aspectWidth)),
+    }));
+  }, [exportOptions.width, imageOptions.aspectRatio]);
+
+  function exportImage() {
+    if (!imageRef.current) return Promise.reject("No image to export");
+    setExportOptions((prev) => ({ ...prev, status: "exporting" }));
 
     const exportFunction = exportOptions.format === "jpeg" ? toJpeg : toPng;
 
@@ -99,7 +112,7 @@ export function EditorProvider({ children, defaultValues }: EditorProviderProps)
       quality: exportOptions.quality,
       pixelRatio: exportOptions.scale,
       canvasWidth: exportOptions.width,
-      canvasHeight: exportOptions.width * (aspectHeight / aspectWidth),
+      canvasHeight: exportOptions.height,
     }).then((dataUrl: string) => {
       const anchor = document.createElement("a");
       anchor.href = dataUrl;
@@ -107,6 +120,7 @@ export function EditorProvider({ children, defaultValues }: EditorProviderProps)
       document.body.appendChild(anchor);
       anchor.click();
       document.body.removeChild(anchor);
+      setExportOptions((prev) => ({ ...prev, status: "idle" }));
     });
   }
 

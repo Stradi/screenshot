@@ -16,7 +16,7 @@ const PopoverContent = React.forwardRef<
         ref={ref}
         // eslint-disable-next-line tailwindcss/no-custom-classname
         className={cn(
-          "mt-1 rounded-lg p-4",
+          "rounded-lg p-4",
           "border border-neutral-200 bg-white shadow-lg",
           "focus:outline-none",
           "data-[state='open']:data-[side='top']:animate-fade-in-down",
