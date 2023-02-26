@@ -40,7 +40,7 @@ export default function Canvas() {
   return (
     <div
       className={cn(
-        "mx-auto h-full max-h-0 min-h-full overflow-hidden p-2",
+        "mx-auto h-full min-h-full overflow-hidden p-2 md:max-h-0",
         "flex items-center justify-center"
       )}
     >

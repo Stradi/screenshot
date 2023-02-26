@@ -15,12 +15,14 @@ export default function App() {
       <NavigationBar items={config.navigation} />
       <Container
         className={cn(
-          "grid grow grid-cols-3 gap-4",
+          "grid grow grid-cols-1 gap-4 md:grid-cols-3",
           "[&>*]:w-full [&>*]:rounded-lg [&>*]:p-4",
           "[&>*]:border [&>*]:border-neutral-200 [&>*]:bg-neutral-50"
         )}
       >
-        <div className="col-span-2">{editor.imageFile ? <Canvas /> : <Dropzone />}</div>
+        <div className="md:col-span-2 md:h-auto">
+          {editor.imageFile ? <Canvas /> : <Dropzone />}
+        </div>
         <div
           className={cn(
             "col-span-1",
