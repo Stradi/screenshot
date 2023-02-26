@@ -1,6 +1,6 @@
 import { useDropzone } from "react-dropzone";
-import { useEditor } from "../context/EditorContext";
-import { cn } from "../utils/tw";
+import { useEditor } from "../../context/EditorContext";
+import { cn } from "../../utils/tw";
 
 export default function Dropzone() {
   const editor = useEditor();

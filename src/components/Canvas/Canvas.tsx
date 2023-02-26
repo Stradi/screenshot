@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
-import { useEditor } from "../context/EditorContext";
-import { shadowBuilder } from "../utils/shadow";
-import { cn } from "../utils/tw";
+import { useEditor } from "../../context/EditorContext";
+import { shadowBuilder } from "../../utils/shadow";
+import { cn } from "../../utils/tw";
 
 export default function Canvas() {
   const editor = useEditor();

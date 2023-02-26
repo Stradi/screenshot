@@ -1,5 +1,5 @@
-import Dropzone from "./components/Dropzone";
-import Canvas from "./components/Canvas";
+import Dropzone from "./components/Canvas/Dropzone";
+import Canvas from "./components/Canvas/Canvas";
 import Container from "./components/Container";
 import Editor from "./components/Editor/Editor";
 import { cn } from "./utils/tw";
