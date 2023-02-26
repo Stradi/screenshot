@@ -1,7 +1,6 @@
-import Dropzone from "./components/Canvas/Dropzone";
-import Canvas from "./components/Canvas/Canvas";
+import { Canvas, Dropzone } from "./components/Canvas";
 import Container from "./components/Container";
-import Editor from "./components/Editor/Editor";
+import { Editor } from "./components/Editor";
 import { cn } from "./utils/tw";
 import { useEditor } from "./context/EditorContext";
 

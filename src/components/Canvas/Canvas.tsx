@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useEditor } from "../../context/EditorContext";
 import { shadowBuilder } from "../../utils/shadow";
 import { cn } from "../../utils/tw";
+import { Safari } from "./Headers";
 
 export default function Canvas() {
   const editor = useEditor();
@@ -61,9 +62,7 @@ export default function Canvas() {
             boxShadow: shadowBuilder(editor.imageOptions.shadow),
           }}
         >
-          <div ref={headerRef} className={cn("h-8 w-full", "bg-black text-center text-white")}>
-            Header
-          </div>
+          <Safari />
           <img ref={imageRef} src={imageURL} alt="Preview" />
         </div>
       </div>
