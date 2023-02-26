@@ -19,7 +19,12 @@ export default function App() {
         )}
       >
         <div className="col-span-2">{editor.imageFile ? <Canvas /> : <Dropzone />}</div>
-        <div className="col-span-1">
+        <div
+          className={cn(
+            "col-span-1",
+            !editor.imageFile && "pointer-events-none cursor-not-allowed opacity-50"
+          )}
+        >
           <Editor />
         </div>
       </Container>
