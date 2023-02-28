@@ -48,10 +48,13 @@ export default function Canvas() {
         ref={editor.imageRef as React.RefObject<HTMLDivElement>}
         className={cn(
           "flex max-h-full items-center overflow-hidden",
-          "bg-gradient-to-tr from-red-500 to-blue-700",
           "transition-[aspect-ratio] duration-300 ease-in-out",
-          aspectRatioToTailwindClass[editor.imageOptions.aspectRatio]
+          aspectRatioToTailwindClass[editor.imageOptions.aspectRatio],
+          editor.backgroundOptions.color.endsWith("00") && "bg-transparent ring-1 ring-neutral-300"
         )}
+        style={{
+          background: editor.backgroundOptions.color,
+        }}
       >
         <div
           className={cn("overflow-hidden", "transition-[max-height] duration-300 ease-in-out")}

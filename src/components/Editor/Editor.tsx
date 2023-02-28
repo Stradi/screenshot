@@ -1,6 +1,7 @@
 import { useEditor } from "../../context/EditorContext";
 import Slider from "../ui/Slider";
 import AspectRatioSelector from "./AspectRatioSelector";
+import BackgroundOptions from "./BackgroundOptions";
 import ExportOptions from "./ExportOptions";
 import ShadowOptions from "./ShadowOptions";
 
@@ -28,6 +29,7 @@ export default function Editor() {
       />
       <AspectRatioSelector />
       <ShadowOptions />
+      <BackgroundOptions />
       <ExportOptions />
     </div>
   );

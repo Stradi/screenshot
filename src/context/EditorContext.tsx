@@ -32,15 +32,21 @@ export type TImageOptions = {
   shadow: TShadowOptions;
 };
 
+export type TBackgroundOptions = {
+  color: string;
+};
+
 export interface EditorContextProps {
   imageRef: React.RefObject<HTMLElement>;
 
   imageOptions: TImageOptions;
   exportOptions: TExportOptions;
+  backgroundOptions: TBackgroundOptions;
   imageFile: File | null;
 
   setImageOptions: (value: TImageOptions) => void;
   setExportOptions: (value: TExportOptions) => void;
+  setBackgroundOptions: (value: TBackgroundOptions) => void;
   setImageFile: (value: File | null) => void;
 
   exportImage: () => void;
@@ -88,6 +94,13 @@ export function EditorProvider({ children, defaultValues }: EditorProviderProps)
       } as TExportOptions)
   );
 
+  const [backgroundOptions, setBackgroundOptions] = useState(
+    defaultValues?.backgroundOptions ??
+      ({
+        color: "#ffffff",
+      } as TBackgroundOptions)
+  );
+
   const imageRef = useRef<HTMLElement>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
 
@@ -101,6 +114,16 @@ export function EditorProvider({ children, defaultValues }: EditorProviderProps)
       height: Math.round(prev.width * (aspectHeight / aspectWidth)),
     }));
   }, [exportOptions.width, imageOptions.aspectRatio]);
+
+  // If background color has transparency, change export format to png
+  useEffect(() => {
+    if (!imageRef.current) return;
+    if (backgroundOptions.color.endsWith("ff")) {
+      setExportOptions((prev) => ({ ...prev, format: "jpeg" }));
+    } else {
+      setExportOptions((prev) => ({ ...prev, format: "png" }));
+    }
+  }, [backgroundOptions.color]);
 
   function exportImage() {
     if (!imageRef.current) return Promise.reject("No image to export");
@@ -129,10 +152,12 @@ export function EditorProvider({ children, defaultValues }: EditorProviderProps)
 
     imageOptions,
     exportOptions,
+    backgroundOptions,
     imageFile,
 
     setImageOptions,
     setExportOptions,
+    setBackgroundOptions,
     setImageFile,
 
     exportImage,
